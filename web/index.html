@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zendia.AI — Neural Network Visualizer</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <header id="header">
+    <div class="logo">
+      <div class="logo-icon">🧠</div>
+      <div class="logo-text">zendia<span>.ai</span></div>
+    </div>
+    <div id="status">
+      <div class="dot" id="status-dot"></div>
+      <span id="status-text">desconectado</span>
+    </div>
+  </header>
+
+  <div id="main">
+    <div id="scene-wrap"></div>
+    <div id="sidebar">
+      <div class="row3">
+        <div class="card">
+          <div class="card-label">Epoch</div>
+          <div class="card-value green" id="v-epoch">0</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Step</div>
+          <div class="card-value accent" id="v-step">0</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Loss</div>
+          <div class="card-value red" id="v-loss">—</div>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="card">
+          <div class="card-label">Avg Loss</div>
+          <div class="card-value yellow" id="v-avg">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Tokens</div>
+          <div class="card-value accent" id="v-tokens">0</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Arquitetura</div>
+        <div class="arch-pills" id="arch-pills">
+          <span class="arch-pill" style="opacity:.4">aguardando...</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Fase</div>
+        <div id="v-phase" class="phase-text">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Heatmap de Ativações</div>
+        <canvas id="heatmap" width="260" height="200"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-label">Loss / Tempo</div>
+        <canvas id="loss-chart"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-label">💬 Amostra</div>
+        <div id="sample-text">aguardando treinamento...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/websocket.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/network3d.js"></script>
+  <script src="js/heatmap.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

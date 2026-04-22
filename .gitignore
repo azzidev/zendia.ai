@@ -1,0 +1,27 @@
+# datasets e modelos (muito grandes)
+datasets/
+*.gob
+
+# logs
+*.txt
+!README.txt
+
+# binários
+*.exe
+__debug_bin*
+
+# Go
+vendor/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# OpenCL gerados
+pkg/gpu/OpenCL.def
+pkg/gpu/libOpenCL.a
+pkg/gpu/opencl/headers/
