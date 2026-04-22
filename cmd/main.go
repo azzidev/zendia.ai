@@ -56,7 +56,8 @@ func main() {
 		}
 	}
 
-	switch *mode {	case "download":
+	switch *mode {
+	case "download":
 		runDownloadWiki(*mongoURI, *maxArticles)
 	case "download-dialogues":
 		runDownloadDialogues(*mongoURI)

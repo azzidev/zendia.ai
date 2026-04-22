@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zendia.AI — Chat</title>
+<link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+
+<div id="header">
+  <div class="logo">
+    <h1>zendia<span>.ai</span></h1>
+  </div>
+  <div id="status">
+    <div class="dot"></div>
+    <span id="status-text">conectando...</span>
+  </div>
+</div>
+
+<div id="messages">
+  <div class="msg msg-system">iniciando conexão...</div>
+</div>
+
+<div class="typing" id="typing">
+  <div class="typing-dots">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<div id="input-area">
+  <input type="text" id="input" placeholder="Digite sua mensagem..." autocomplete="off">
+  <button id="send">Enviar</button>
+</div>
+
+<script>
+const messages = document.getElementById('messages');
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('send');
+const typing = document.getElementById('typing');
+const statusText = document.getElementById('status-text');
+
+function addMessage(content, from, type) {
+  const div = document.createElement('div');
+
+  if (type === 'info' || from === 'system') {
+    div.className = 'msg msg-system';
+    div.textContent = content;
+  } else {
+    const cls = from === 'user' ? 'msg-user' : 'msg-bot';
+    div.className = 'msg ' + cls;
+
+    const header = document.createElement('div');
+    header.className = 'msg-header';
+    const name = document.createElement('span');
+    name.className = 'name';
+    name.textContent = from === 'user' ? 'você' : 'zendia';
+    const time = document.createElement('span');
+    time.textContent = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    header.appendChild(name);
+    header.appendChild(time);
+
+    const body = document.createElement('div');
+    body.textContent = content;
+
+    div.appendChild(header);
+    div.appendChild(body);
+  }
+
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+const ws = new WebSocket('ws://' + location.host + '/ws/chat');
+
+ws.onopen = () => {
+  statusText.textContent = 'online';
+  addMessage('conectado! pode conversar.', 'system', 'info');
+};
+
+ws.onclose = () => {
+  statusText.textContent = 'desconectado';
+  document.querySelector('.dot').style.background = '#ff7675';
+  addMessage('conexão perdida.', 'system', 'info');
+};
+
+ws.onmessage = (e) => {
+  typing.style.display = 'none';
+  const data = JSON.parse(e.data);
+
+  if (data.type === 'info') {
+    addMessage(data.content, 'system', 'info');
+  } else {
+    addMessage(data.content, data.from, 'message');
+  }
+};
+
+function send() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, 'user', 'message');
+  input.value = '';
+
+  typing.style.display = 'block';
+  messages.scrollTop = messages.scrollHeight;
+
+  ws.send(JSON.stringify({ type: 'message', content: text, from: 'user' }));
+}
+
+sendBtn.addEventListener('click', send);
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') send();
+});
+
+input.focus();
+</script>
+</body>
+</html>
